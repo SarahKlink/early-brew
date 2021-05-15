@@ -13,29 +13,54 @@ gpio.setup(GPIO_PIN_COFFEE_BIG,DIR_HIGH); // Sets GPIO pin up with start value o
 
 const PORT_NUMBER = 3000;
 
+let busy = false;
+
+
 var server = http.createServer(function (req, res) {   // 2 - creating server
 
 
     if (req.url == '/') { //check the URL of the current request
-        
         // set response header
         res.writeHead(200, { 'Content-Type': 'text/html' });         
         // set response content    
-        res.write(`<html><body><p>Welcome to morning brew</p></body></html>`);
+        if(busy){
+            res.write(`<html><body><h1>Welcome to morning brew</h1>Status: Busy</body></html>`);
+        }
+        else{
+            res.write(`<html><body><h1>Welcome to morning brew</h1>Status: Ready</body></html>`);
+        }
         res.end();
-    
     }
     else if (req.url == "/big" && req.method == 'POST') {
-        //code von sarah
-        // e.g. gpio.write(GPIO_PIN_COFFEE_BIG,false); false = relay on!
-        res.end();
+        console.log("POST request on /big");
+        if(busy == false){
+            busy = true;
+            res.write(`Brewing your coffee!`);
+            res.end();
+            //code von sarah
+            // e.g. gpio.write(GPIO_PIN_COFFEE_BIG,false); false = relay on!
+            busy = false;
+        }
+        else{
+            res.write(`<html><body><h1>Welcome to morning brew</h1>Sorry, the machine is busy</body></html>`);
+            res.end();
+        }
     
     }
     else if (req.url == "/small" && req.method == 'POST') {
-        //code von sarah
-        // see example for /big
-        res.end();
-    
+        console.log("POST request on /small");
+        if(busy == false){
+            busy = true;
+            res.write(`Brewing your coffee!`);
+            res.end();
+            //code von sarah
+            // e.g. gpio.write(GPIO_PIN_COFFEE_BIG,false); false = relay on!
+            busy = false;
+        }
+        else{
+            res.write(`<html><body><h1>Welcome to morning brew</h1>Sorry, the machine is busy</body></html>`);
+            res.end();
+        }
     }
     else
         res.end('Invalid Request!');
