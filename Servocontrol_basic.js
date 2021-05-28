@@ -25,18 +25,12 @@ var options = {
 var pwm;
 
 async function processflow(){    
-    console.log("move stack");
-        pwm.setPulseLength(0, 1200);
-        await sleep(1200);                   //debug output: const result = await sleep(1200); console.log(result);
-        pwm.setPulseLength(0, 2250);
+    
 
-    await sleep(1000);
-    console.log("insert capsule");
-        pwm.setPulseLength(1, 1200);
-        await sleep(1200);                   //debug output: const result = await sleep(1200); console.log(result);
-        pwm.setPulseLength(1, 2250);
+    console.log("Automation process completed.");
+}
 
-    await sleep(1000);
+async function openlever(){
     console.log("open lever");
     var tempRotation = 91;
     pwm.setPulseRange(2,0,tempRotation);
@@ -44,30 +38,36 @@ async function processflow(){
     await sleep(3000);
     pwm.setPulseRange(2,0,0);
     pwm.setPulseRange(3,0,0);
+}
 
-// '    await sleep(2000);
-//     console.log("close lever");
-//     var tempRotation = 91;
-//     pwm.setPulseRange(2,0,tempRotation);
-//     pwm.setPulseRange(3,515,tempRotation,515);
-//     await sleep(3000);
-//     pwm.setPulseRange(2,0,0);
-//     pwm.setPulseRange(3,0,0);
+async function closelever(){ 
+    console.log("close lever");
+    var tempRotation = 91;
+    pwm.setPulseRange(2,0,tempRotation);
+    pwm.setPulseRange(3,515,tempRotation,515);
+    await sleep(3000);
+    pwm.setPulseRange(2,0,0);
+    pwm.setPulseRange(3,0,0);
+}
 
-    console.log("Automation process completed.");
+async function insert capsule(){ 
+    console.log("insert capsule");
+    pwm.setPulseLength(1, 1200);
+    await sleep(1200);                   
+    pwm.setPulseLength(1, 2250);
+}
+
+async function resetstack(){ //if globale var Position stack == 4
+    pwm.setPulseRange(4,0,0);
+    await sleep(3000);
+}
+
+async function operatebuttons(){
+ //insert code to operate relais
 }
 
 
-
-async function movelever(port1,port2,temp,time){                     //temp1: Geschwindigkeit 91-300 zunehmend langsamer nach rechts
-    pwm.setPulseRange(port1,0,temp);
-    pwm.setPulseRange(port2,515-temp,515);
-    await sleep(time)
-    pwm.setPulseRange(port1,0,0);
-    pwm.setPulseRange(port2,0,0);
-}
-
-function sleep(ms) {
+function sleep(ms) {                    //debug output: const result = await sleep(1200); console.log(result);
     return new Promise(resolve => setTimeout(() => {resolve('sleep of '+ms+ ' ms completed')}, ms)); //timeout von ms[ms] bis Kommentar zurück gegeneb -> Ablauf temporär blockiert
   }
 
