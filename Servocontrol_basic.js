@@ -50,7 +50,7 @@ async function closelever(){
     pwm.setPulseRange(3,0,0);
 }
 
-async function insert capsule(){ 
+async function insertcapsule(){ 
     console.log("insert capsule");
     pwm.setPulseLength(1, 1200);
     await sleep(1200);                   
